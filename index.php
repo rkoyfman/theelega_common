@@ -7,6 +7,7 @@
  */
 
 require_once 'functions.php';
+require_once 'startup.php';
 
 function theelega_load_postjs()
 {    
