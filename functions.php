@@ -84,4 +84,38 @@ function theelega_build_category_tree($array)
 
     return $ret;
 }
+
+function theelega_debug_backtrace()
+{
+    ob_start();
+    debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+    $ret = ob_get_clean();
+    return $ret;
+}
+
+function theelega_log($file, $txt)
+{
+    $timestamp = new DateTime();
+    $timestamp = $timestamp->format(DateTime::ISO8601);
+    
+    $dir = trailingslashit(get_home_path()) . '/wp-content/logs';
+    if (!file_exists($dir))
+    {
+        mkdir($dir, 0777, true);
+    }
+    
+    $file = $dir . '/' . $file;
+
+    $myfile = fopen($file, 'a');
+    
+    fwrite($myfile,
+    $timestamp
+        . ' (Greenwich time):' 
+        . PHP_EOL
+        . $txt
+        . PHP_EOL . PHP_EOL
+        . theelega_debug_backtrace()
+        . PHP_EOL . PHP_EOL);
+    fclose($myfile);
+}
 ?>
