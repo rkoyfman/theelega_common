@@ -1,6 +1,3 @@
-
-//Must call theelega_load_postjs() to use this.
-
 /*
     Sends a post request through AJAX, using JQuery under the hood.
 
@@ -51,16 +48,14 @@ function THEELEGA_common_post(ajax_url, _ajax_nonce, action, post_data, status_e
 
         if (resp_obj.success)
         {
-            on_success(resp_obj);            
             status_element.text('Success');
+            on_success(resp_obj);
         }
         else
         {
-            status_element.text('Error!');
+            status_element.text('Error: ' + response);
             on_error(resp_obj);
         }
-
-        status_element.text(response);
     })
     .error(function onPostError(xhr, status, error)
     {
