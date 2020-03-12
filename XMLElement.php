@@ -28,11 +28,6 @@ class THEELEGA_XMLElement
     public function __toString()
     {
         $ret = self::toDOM($this)->saveXML();
-        if (theelega_string_startswith($ret, '<?xml'))
-        {
-            $loc = strpos($ret, '>');
-            $ret = substr($ret, $loc + 1);
-        }
         
         $ret = trim($ret);
         $ret = str_replace('&#xD;', "\r", $ret);
@@ -114,6 +109,7 @@ class THEELEGA_XMLElement
             $xmldoc = new DomDocument();
             $xmldoc->preserveWhiteSpace = false;
             $xmldoc->formatOutput = true;
+            $xmldoc->encoding = 'UTF-8';
     
             $parent = $xmldoc;
         }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: TheElegantYou Common Functions
  * Description: Reusable functions for other plugins. Other plugins depend on it.
- * Version:     1.0.1
+ * Version:     2.0
  * Author:      Roman Koyfman
  */
 

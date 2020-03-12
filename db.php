@@ -44,6 +44,54 @@ class THEELEGA_db
         $this->wpdb->query($sql);
         theelega_throw_on_db_error($this->wpdb);
     }
+
+    /**
+     * Like the WP function @see get_metadata(), but gets many at once.
+     * 
+     * @param array $ids - object IDs for which to get meta
+     * @param array $meta_keys - types of meta to get
+     * @param array $meta_type - things like post, comment, term...
+     * 
+     * @return 
+    */
+    public function get_meta($ids, $meta_keys, $meta_type)
+    {
+        $ids = $ids ? $ids : [];
+        $meta_keys = $meta_keys ? $meta_keys : [];
+
+        $ids = implode(',', array_map('intval', $ids));
+        $meta_keys = "'" . implode("', '", array_map('esc_sql', $meta_keys)) . "'";
+        
+        $id_clause = '';
+        if ($ids)
+        {
+            $id_clause = "AND {$meta_type}_id IN ($ids)";
+        }
+
+        $metakey_clause = '';
+        if ($meta_keys)
+        {
+            $metakey_clause = "AND meta_key IN ($meta_keys)";
+        }
+        
+        $sql = "SELECT *
+        FROM {$this->prefix}{$meta_type}meta
+        WHERE 1 = 1
+        $id_clause
+        $metakey_clause";
+
+        $ret = new THEELEGA_get_meta_result();
+        foreach ($this->get_results($sql) as $row)
+        {
+            $pid = $row['post_id'];
+            $key = $row['meta_key'];
+
+            $ret->result[$pid][$key]['id'] = trim($row['meta_id']);
+            $ret->result[$pid][$key]['value'] = trim($row['meta_value']);
+        }
+
+        return $ret;
+    }
 }
 
 function theelega_throw_on_db_error($db = null)
@@ -55,6 +103,37 @@ function theelega_throw_on_db_error($db = null)
     if ($e)
     {
         throw new Exception($e);
+    }
+}
+
+/**
+ * Class for the return value of THEELEGA_db::get_meta().
+ */
+class THEELEGA_get_meta_result
+{
+    public $result = [];
+    public $meta_type = '';
+
+    /** Get the meta_value corresponding to the given object and meta_key */
+    public function get($object_id, $meta_key, $default = null)
+    {
+        if (isset($this->result[$object_id][$meta_key]['value']))
+        {
+            return $this->result[$object_id][$meta_key]['value'];
+        }
+
+        return $default;
+    }
+
+    /** Get the meta_id corresponding to the given object and meta_key */
+    public function get_id($object_id, $meta_key, $default = null)
+    {
+        if (isset($this->result[$object_id][$meta_key]['id']))
+        {
+            return $this->result[$object_id][$meta_key]['id'];
+        }
+
+        return $default;
     }
 }
 ?>

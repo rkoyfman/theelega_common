@@ -60,9 +60,9 @@ function theelega_build_category_tree($array)
 
     foreach ($array as $a)
     {
-        $c = new WP_Term((object) $a);
-        $c->ancestors = [];
+        $c = $a instanceof WP_Term ? $a : new WP_Term((object) $a);
         $c->ancestor_slugs = [];
+        $c->descendent_slugs = [];
 
         $ret['IDs'][$c->term_taxonomy_id] = $c;
         $ret['slugs'][$c->slug] = $c;
@@ -75,8 +75,8 @@ function theelega_build_category_tree($array)
         while ($pid)
         {
             $p = $ret['IDs'][$pid];
-            $c->ancestors[] = $p;
-            $c->ancestor_slugs[] = $p->slug;
+            $c->ancestor_slugs[$p->slug] = $p->slug;
+            $p->descendent_slugs[$c->slug] = $c->slug;
 
             $pid = $p->parent;
         }
