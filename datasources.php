@@ -1,4 +1,5 @@
 <?php
+
 function theelega_read_csv_from_post($field_name, $strip_prices = false)
 {
     $input_file = $_FILES[$field_name]['tmp_name'];
@@ -12,30 +13,21 @@ function theelega_read_csv_from_post($field_name, $strip_prices = false)
 
 function theelega_read_csv_from_file($input_file, $strip_prices = false)
 {
-    $file_resource = fopen($input_file, "r");
-    if ($file_resource === false)
+    $string = file_get_contents($input_file);
+    if ($string === false)
     {
-        throw('CSV: File not found.');
+        throw new Exception('CSV: File not found.');
     }
 
-    $csv = array();
-    while(true)
-    {
-        $row = fgetcsv($file_resource);
-        if (!is_array($row))
-        {
-            break;
-        }
+    return theelega_read_csv_from_string($string, $strip_prices);
+}
 
-        $row = array_map('trim', $row);
-        if (strlen(implode('', $row)) > 0)
-        {
-            $csv[] = $row;
-        }
-    }
-    fclose($file_resource);
+function theelega_read_csv_from_string($string, $strip_prices = false)
+{
+    $lines = preg_split("/[\n\r]+/", $string);
+    $csv = array_map('str_getcsv', $lines);
 
-    if (!isset($csv[0]) || !is_array($csv[0]))
+    if (!isset($csv[0][0]))
     {
         die('CSV: File had no data.');
     }
