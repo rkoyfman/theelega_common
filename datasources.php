@@ -24,8 +24,17 @@ function theelega_read_csv_from_file($input_file, $strip_prices = false)
 
 function theelega_read_csv_from_string($string, $strip_prices = false)
 {
-    $lines = preg_split("/[\n\r]+/", $string);
-    $csv = array_map('str_getcsv', $lines);
+    $stream = fopen('php://memory', 'r+');
+    fwrite($stream, $string);
+    rewind($stream);
+    $csv = [];
+    while (($row = fgetcsv($stream)) !== false)
+    {
+        if (trim(implode('', $row)))
+        {
+            $csv[] = $row;
+        }
+    }
 
     if (!isset($csv[0][0]))
     {
