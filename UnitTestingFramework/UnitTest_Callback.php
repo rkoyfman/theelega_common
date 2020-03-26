@@ -39,4 +39,3 @@ class THEELEGA_UnitTest_Callback extends THEELEGA_UnitTest
     }
 }
 ?>
-
