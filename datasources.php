@@ -32,7 +32,13 @@ function theelega_read_csv_from_string($string, $strip_prices = false)
     {
         if (trim(implode('', $row)))
         {
-            $csv[] = $row;
+            $csv[] = array_map('trim', $row);
+
+            $last = count($csv) - 1;
+            if (count($csv[0]) <> count($csv[$last]))
+            {
+                die('CSV: Rows don\'t have the same length.');
+            }
         }
     }
 
