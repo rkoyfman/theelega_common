@@ -14,11 +14,11 @@ function theelega_arr_get($arr, $keys, $default = null)
 
     foreach ($keys as $k)
     {
-        if (isset($ret[$k]))
+        if (is_array($ret) && isset($ret[$k]))
         {
             $ret = $ret[$k];
         }
-        elseif (isset($ret->$k))
+        elseif (is_object($ret) && isset($ret->$k))
         {
             $ret = $ret->$k;
         }
