@@ -5,6 +5,8 @@ function theelega_missing_dependencies($dependencies)
 {        
     $deps_available = [
         'acf' => class_exists('ACF'),
+        'theplus' => class_exists('ThePlus_addon'),
+        'js_composer' => class_exists('Vc_Manager'), //WPBakery Page Builder
         'woocommerce' => class_exists('WooCommerce'),
         'wpallimport' => class_exists('PMXI_Plugin'),
         'wpallimport-woocommerce' => class_exists('PMWI_Plugin'),
