@@ -31,6 +31,11 @@ function theelega_arr_get($arr, $keys, $default = null)
     return $ret;
 }
 
+function theelega_arr_last($arr)
+{
+    return theelega_arr_get($arr, count($arr) - 1);
+}
+
 /**
  * Scans through the values of an array (which are themselves arrays or objects) and groups them by one or more keys.
  * The result is a multiply nested array, with one dimension for each key.
