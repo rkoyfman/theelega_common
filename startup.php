@@ -8,6 +8,7 @@ function theelega_missing_dependencies($dependencies)
         'theplus' => class_exists('ThePlus_addon'),
         'js_composer' => class_exists('Vc_Manager'), //WPBakery Page Builder
         'woocommerce' => class_exists('WooCommerce'),
+        'suppliers' => class_exists('FT_SMFW_Plugin'),
         'wpallimport' => class_exists('PMXI_Plugin'),
         'wpallimport-woocommerce' => class_exists('PMWI_Plugin'),
     ];
